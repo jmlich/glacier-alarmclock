@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Icon=/usr/share/glacier-alarmclock/icons/icon-app-clock.png
+Exec=/usr/bin/glacier-alarmclock
+Name=Clock
