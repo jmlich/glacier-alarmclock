@@ -32,96 +32,109 @@ Page {
 
     }
 
-    Column {
+    Flickable {
+        id: mainFlickable
         anchors.fill: parent;
+        contentHeight: mainColumn.childrenRect.height
+        contentWidth: parent.width
 
 
-        TimePicker {
-            id: timePicker
-            width: 300;
-            height: 300;
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.margins: Theme.itemSpacingLarge
-            readOnly: false;
-            currentTime: (selectedAlarm !== null) ? new Date(2000, 1, 1, selectedAlarm.hour, selectedAlarm.minute) : new Date();
-        }
-
-        Text {
-            id: timePickerText
-            font.pixelSize: Theme.fontSizeExtraLarge
-            color: Theme.textColor
-            text: timePicker.currentTime.getHours() + ":" + pad2(timePicker.currentTime.getMinutes());
-            anchors.horizontalCenter: timePicker.horizontalCenter
-            anchors.topMargin: Theme.itemSpacingMedium
-            anchors.bottomMargin: Theme.itemSpacingLarge
-
-        }
-        Repeater {
-            model: daysOfWeekModel
-            CheckBox {
-                anchors.margins: Theme.itemSpacingMedium
-                text: model.short_name
-                checked: model.enabled;
-                onCheckedChanged: {
-                    model.enabled = checked
-                }
-            }
-        }
-
-
-
-        Row {
+        Column {
+            id: mainColumn;
             width: parent.width
-            height: childrenRect.height
-            Button {
-                text: (selectedAlarm !== null) ? qsTr("Update") : qsTr("Add")
-                primary: true;
-                width: parent.width/2;
-                onClicked: {
-                    var daysOfWeekStr = ''
-                    for (var i = 0; i < daysOfWeekModel.count; i++) {
-                        var it = daysOfWeekModel.get(i);
-                        if (it.enabled) {
-                            daysOfWeekStr += it.letter
+
+
+            TimePicker {
+                id: timePicker
+                width: 300;
+                height: 300;
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.margins: Theme.itemSpacingLarge
+                readOnly: false;
+                currentTime: (selectedAlarm !== null) ? new Date(2000, 1, 1, selectedAlarm.hour, selectedAlarm.minute) : new Date();
+            }
+
+            Text {
+                id: timePickerText
+                font.pixelSize: Theme.fontSizeExtraLarge
+                color: Theme.textColor
+                text: timePicker.currentTime.getHours() + ":" + pad2(timePicker.currentTime.getMinutes());
+                anchors.horizontalCenter: timePicker.horizontalCenter
+                anchors.topMargin: Theme.itemSpacingMedium
+                anchors.bottomMargin: Theme.itemSpacingLarge
+
+            }
+            Repeater {
+                model: daysOfWeekModel
+                CheckBox {
+                    anchors.margins: Theme.itemSpacingMedium
+                    text: model.short_name
+                    checked: model.enabled;
+                    onCheckedChanged: {
+                        model.enabled = checked
+                    }
+                }
+            }
+
+
+
+            Row {
+                width: parent.width
+                height: childrenRect.height
+                Button {
+                    text: (selectedAlarm !== null) ? qsTr("Update") : qsTr("Add")
+                    primary: true;
+                    width: parent.width/2;
+                    onClicked: {
+                        var daysOfWeekStr = ''
+                        for (var i = 0; i < daysOfWeekModel.count; i++) {
+                            var it = daysOfWeekModel.get(i);
+                            if (it.enabled) {
+                                daysOfWeekStr += it.letter
+                            }
                         }
-                    }
-                    var alarm;
-                    if (selectedAlarm !== null) {
-                        alarm = selectedAlarm;
-                    } else {
-                        alarm = alarmModel.createAlarm()
-                    }
-                    alarm.title = qsTr("Alarm")
-                    alarm.hour = timePicker.currentTime.getHours();
-                    alarm.minute = timePicker.currentTime.getMinutes();
-                    alarm.daysOfWeek = daysOfWeekStr
-                    alarm.enabled = true;
-                    alarm.save();
-                    pageStack.pop();
+                        var alarm;
+                        if (selectedAlarm !== null) {
+                            alarm = selectedAlarm;
+                        } else {
+                            alarm = alarmModel.createAlarm()
+                        }
+                        alarm.title = qsTr("Alarm")
+                        alarm.hour = timePicker.currentTime.getHours();
+                        alarm.minute = timePicker.currentTime.getMinutes();
+                        alarm.daysOfWeek = daysOfWeekStr
+                        alarm.enabled = true;
+                        alarm.save();
+                        pageStack.pop();
 
+                    }
                 }
-            }
-            Button {
-                text: qsTr("Delete");
-                visible: (selectedAlarm !== null)
-                width: parent.width/2
-                onClicked: {
-                    selectedAlarm.deleteAlarm()
-                    pageStack.pop();
+                Button {
+                    text: qsTr("Delete");
+                    visible: (selectedAlarm !== null)
+                    width: parent.width/2
+                    onClicked: {
+                        selectedAlarm.deleteAlarm()
+                        pageStack.pop();
+                    }
                 }
-            }
 
-            Button {
-                visible: (selectedAlarm === null)
-                text: qsTr("Cancel")
-                width: parent.width/2;
-                onClicked: {
-                    pageStack.pop();
+                Button {
+                    visible: (selectedAlarm === null)
+                    text: qsTr("Cancel")
+                    width: parent.width/2;
+                    onClicked: {
+                        pageStack.pop();
+                    }
                 }
+
             }
 
         }
+    }
 
+    ScrollDecorator {
+        flickable: mainFlickable
     }
 
 }
