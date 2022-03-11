@@ -54,16 +54,22 @@ Page {
                 currentTime: (selectedAlarm !== null) ? new Date(2000, 1, 1, selectedAlarm.hour, selectedAlarm.minute) : new Date();
             }
 
-            Text {
-                id: timePickerText
-                font.pixelSize: Theme.fontSizeExtraLarge
-                color: Theme.textColor
-                text: timePicker.currentTime.getHours() + ":" + pad2(timePicker.currentTime.getMinutes());
-                anchors.horizontalCenter: timePicker.horizontalCenter
-                anchors.topMargin: Theme.itemSpacingMedium
-                anchors.bottomMargin: Theme.itemSpacingLarge
+            TextField{
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: Qt.formatDateTime(timePicker.currentTime, "HH:mm");
+                width: Theme.itemWidthExtraSmall
+                horizontalAlignment: TextInput.AlignHCenter
+                inputMethodHints: Qt.ImhDigitsOnly
+                inputMask: "00:00;_"
 
+                onEditingFinished: {
+                    var values = text.split(":")
+                    timePicker.currentTime = new Date(2000, 1, 1, values[0], values[1])
+                }
             }
+
+
+
             Repeater {
                 model: daysOfWeekModel
                 CheckBox {
