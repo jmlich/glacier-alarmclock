@@ -42,6 +42,7 @@ Page {
         Column {
             id: mainColumn;
             width: parent.width
+            spacing: Theme.itemSpacingSmall
 
 
             TimePicker {
@@ -57,7 +58,7 @@ Page {
             TextField{
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: Qt.formatDateTime(timePicker.currentTime, "HH:mm");
-                width: Theme.itemWidthExtraSmall
+                width: Theme.itemWidthSmall
                 horizontalAlignment: TextInput.AlignHCenter
                 inputMethodHints: Qt.ImhDigitsOnly
                 inputMask: "00:00;_"
@@ -68,21 +69,26 @@ Page {
                 }
             }
 
+            Grid {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.margins: Theme.itemSpacingMedium
+                spacing: Theme.itemSpacingMedium
+                columns: 2
+                flow: Grid.TopToBottom
 
-
-            Repeater {
-                model: daysOfWeekModel
-                CheckBox {
-                    anchors.margins: Theme.itemSpacingMedium
-                    text: model.short_name
-                    checked: model.enabled;
-                    onCheckedChanged: {
-                        model.enabled = checked
+                Repeater {
+                    model: daysOfWeekModel
+                    CheckBox {
+                        anchors.margins: Theme.itemSpacingMedium
+                        text: model.short_name
+                        checked: model.enabled;
+                        onCheckedChanged: {
+                            model.enabled = checked
+                        }
                     }
                 }
             }
-
-
 
             Row {
                 width: parent.width
