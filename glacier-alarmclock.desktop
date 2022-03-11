@@ -3,3 +3,6 @@ Type=Application
 Icon=/usr/share/glacier-alarmclock/icons/icon-app-clock.png
 Exec=/usr/bin/glacier-alarmclock
 Name=Clock
+Name[pl]=Zegar
+Name[ru]=Часы
+Name[cs]=Hodiny
