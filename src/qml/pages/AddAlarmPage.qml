@@ -32,28 +32,46 @@ Page {
 
     }
 
+    property bool layoutPortrait: mainPage.width < mainPage.height
+
+    Item {
+        id: timerColumn
+
+        width: (mainPage.layoutPortrait ? mainPage.width : mainPage.width / 2)
+        height: (mainPage.layoutPortrait ? mainPage.height/2 : mainPage.height) - buttonsRow.height
+
+        TimePicker {
+            id: timePicker
+            width: Math.min(parent.width, parent.height) - Theme.itemSpacingMedium
+            height: width
+            anchors.centerIn: parent
+            anchors.margins: Theme.itemSpacingLarge
+            hoursLineWidth: Math.min(Theme.itemHeightSmall, timerColumn.height/10)
+            minutesLineWidth: Math.min( Theme.itemHeightExtraSmall/2 , timerColumn.height/14)
+            readOnly: false;
+            currentTime: (selectedAlarm !== null) ? new Date(2000, 1, 1, selectedAlarm.hour, selectedAlarm.minute) : new Date();
+        }
+
+    }
+
+
+
     Flickable {
         id: mainFlickable
-        anchors.fill: parent;
-        contentHeight: mainColumn.childrenRect.height
-        contentWidth: parent.width
-
+        anchors.top: mainPage.layoutPortrait ? timerColumn.bottom: parent.top;
+        anchors.left: mainPage.layoutPortrait ? parent.left : timerColumn.right
+        anchors.right: parent.right
+        anchors.bottom: buttonsRow.top
+        anchors.margins: Theme.itemSpacingMedium
+        contentHeight: settingsColumn.childrenRect.height
+        clip: true
 
         Column {
-            id: mainColumn;
+            id: settingsColumn
+            spacing: Theme.itemSpacingMedium
             width: parent.width
-            spacing: Theme.itemSpacingSmall
+            height: childrenRect.height
 
-
-            TimePicker {
-                id: timePicker
-                width: 300;
-                height: 300;
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.margins: Theme.itemSpacingLarge
-                readOnly: false;
-                currentTime: (selectedAlarm !== null) ? new Date(2000, 1, 1, selectedAlarm.hour, selectedAlarm.minute) : new Date();
-            }
 
             TextField{
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -69,10 +87,9 @@ Page {
                 }
             }
 
+
             Grid {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.margins: Theme.itemSpacingMedium
+
                 spacing: Theme.itemSpacingMedium
                 columns: 2
                 flow: Grid.TopToBottom
@@ -89,64 +106,66 @@ Page {
                     }
                 }
             }
+        }
 
-            Row {
-                width: parent.width
-                height: childrenRect.height
-                Button {
-                    text: (selectedAlarm !== null) ? qsTr("Update") : qsTr("Add")
-                    primary: true;
-                    width: parent.width/2;
-                    onClicked: {
-                        var daysOfWeekStr = ''
-                        for (var i = 0; i < daysOfWeekModel.count; i++) {
-                            var it = daysOfWeekModel.get(i);
-                            if (it.enabled) {
-                                daysOfWeekStr += it.letter
-                            }
-                        }
-                        var alarm;
-                        if (selectedAlarm !== null) {
-                            alarm = selectedAlarm;
-                        } else {
-                            alarm = alarmModel.createAlarm()
-                        }
-                        alarm.title = qsTr("Alarm")
-                        alarm.hour = timePicker.currentTime.getHours();
-                        alarm.minute = timePicker.currentTime.getMinutes();
-                        alarm.daysOfWeek = daysOfWeekStr
-                        alarm.enabled = true;
-                        alarm.save();
-                        pageStack.pop();
+    }
 
+
+
+
+    Row {
+        id: buttonsRow
+        anchors.bottom: parent.bottom;
+        width: parent.width
+        height: childrenRect.height
+        Button {
+            text: (selectedAlarm !== null) ? qsTr("Update") : qsTr("Add")
+            primary: true;
+            width: parent.width/2;
+            onClicked: {
+                var daysOfWeekStr = ''
+                for (var i = 0; i < daysOfWeekModel.count; i++) {
+                    var it = daysOfWeekModel.get(i);
+                    if (it.enabled) {
+                        daysOfWeekStr += it.letter
                     }
                 }
-                Button {
-                    text: qsTr("Delete");
-                    visible: (selectedAlarm !== null)
-                    width: parent.width/2
-                    onClicked: {
-                        selectedAlarm.deleteAlarm()
-                        pageStack.pop();
-                    }
+                var alarm;
+                if (selectedAlarm !== null) {
+                    alarm = selectedAlarm;
+                } else {
+                    alarm = alarmModel.createAlarm()
                 }
-
-                Button {
-                    visible: (selectedAlarm === null)
-                    text: qsTr("Cancel")
-                    width: parent.width/2;
-                    onClicked: {
-                        pageStack.pop();
-                    }
-                }
+                alarm.title = qsTr("Alarm")
+                alarm.hour = timePicker.currentTime.getHours();
+                alarm.minute = timePicker.currentTime.getMinutes();
+                alarm.daysOfWeek = daysOfWeekStr
+                alarm.enabled = true;
+                alarm.save();
+                pageStack.pop();
 
             }
-
         }
+        Button {
+            text: qsTr("Delete");
+            visible: (selectedAlarm !== null)
+            width: parent.width/2
+            onClicked: {
+                selectedAlarm.deleteAlarm()
+                pageStack.pop();
+            }
+        }
+
+        Button {
+            visible: (selectedAlarm === null)
+            text: qsTr("Cancel")
+            width: parent.width/2;
+            onClicked: {
+                pageStack.pop();
+            }
+        }
+
     }
 
-    ScrollDecorator {
-        flickable: mainFlickable
-    }
 
 }
