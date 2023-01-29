@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 
     QQuickWindow* window = GlacierApp::showWindow();
     window->setTitle(QObject::tr("Clock"));
-    window->setIcon(QIcon("/usr/share/glacier-alarmclock/images/icon-app-clock.png"));
+    window->setIcon(QIcon("/usr/share/glacier-alarmclock/icons/icon-app-clock.png"));
 
     return app->exec();
 }
