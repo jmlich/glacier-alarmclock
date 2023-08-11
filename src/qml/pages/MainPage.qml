@@ -11,7 +11,11 @@ Page {
     id: mainPage
 
     AlarmsModel {
-        id:alarmModel
+        id: alarmModel
+        onPopulatedChanged: {
+
+            console.log("populated" + populated)
+        }
     }
 
 
