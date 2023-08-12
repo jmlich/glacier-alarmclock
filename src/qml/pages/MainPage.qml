@@ -23,13 +23,13 @@ Page {
 //            ToolButton {
 //                iconSource: "image://theme/cog"
 //                onClicked: {
-//                    mainPage.Stack.view.push(Qt.resolvedUrl("SettingsPage.qml"), {settingsObject: settings})
+//                    window.pageStack.push(Qt.resolvedUrl("SettingsPage.qml"), {settingsObject: settings})
 //                }
 //            },
             ToolButton {
                 iconSource: "image://theme/plus"
                 onClicked: {
-                    mainPage.Stack.view.push(Qt.resolvedUrl("AddAlarmPage.qml"), {alarmModel: alarmModel, selectedAlarm: null})
+                    window.pageStack.push(Qt.resolvedUrl("AddAlarmPage.qml"), {alarmModel: alarmModel, selectedAlarm: null})
                 }
             }
 
@@ -52,7 +52,7 @@ Page {
             height: Theme.itemHeightLarge
 
             onClicked: {
-                mainPage.Stack.view.push(Qt.resolvedUrl("AddAlarmPage.qml"), {alarmModel: model, selectedAlarm: model.alarm})
+                window.pageStack.push(Qt.resolvedUrl("AddAlarmPage.qml"), {alarmModel: model, selectedAlarm: model.alarm})
             }
 
             actions:[

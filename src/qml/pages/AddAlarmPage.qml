@@ -139,7 +139,7 @@ Page {
                 alarm.daysOfWeek = daysOfWeekStr
                 alarm.enabled = true;
                 alarm.save();
-                pageStack.pop();
+                window.pageStack.pop();
 
             }
         }
@@ -149,7 +149,7 @@ Page {
             width: parent.width/2
             onClicked: {
                 selectedAlarm.deleteAlarm()
-                pageStack.pop();
+                window.pageStack.pop();
             }
         }
 
@@ -158,7 +158,7 @@ Page {
             text: qsTr("Cancel")
             width: parent.width/2;
             onClicked: {
-                pageStack.pop();
+                window.pageStack.pop();
             }
         }
 
