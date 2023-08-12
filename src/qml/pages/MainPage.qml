@@ -1,10 +1,6 @@
-import QtQuick 2.6
-
-import QtQuick.Controls 1.0
-import QtQuick.Controls.Nemo 1.0
-
-import Nemo.Alarms 1.0
-
+import QtQuick
+import Nemo.Controls
+import Nemo.Alarms
 
 Page {
 
